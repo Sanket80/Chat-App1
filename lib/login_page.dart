@@ -1,3 +1,4 @@
+import 'package:chat_app/chat_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -5,11 +6,15 @@ class LoginPage extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
 
-  void loginUser() {
-    if (_formKey.currentContext!=null && _formKey.currentState!.validate()) {
+  void loginUser(BuildContext context) {
+    if (_formKey.currentContext != null && _formKey.currentState!.validate()) {
       print('Username: ${UserNameController.text}');
       print('Password: ${PasswordController.text}');
       print('Login User');
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => ChatPage(username: UserNameController.text,)));
+      Navigator.pushReplacementNamed(context, '/chat',
+          arguments: '${UserNameController.text}');
     } else {
       print('Not Successful');
     }
@@ -50,7 +55,6 @@ class LoginPage extends StatelessWidget {
                   'https://img.freepik.com/premium-vector/chat-app-logo-sms-messenger-label-design-mobile-app-online-conversation-with-texting-message-ui-design-concept-vector-illustration_172533-1513.jpg',
                   height: 200),
               const SizedBox(height: 14),
-
               Form(
                 key: _formKey,
                 child: Column(
@@ -59,7 +63,7 @@ class LoginPage extends StatelessWidget {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your username';
-                        }else if(value.length < 6){
+                        } else if (value.length < 6) {
                           return 'Username must be atleast 6 characters long';
                         }
                         return null; // if the value is valid
@@ -74,12 +78,11 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 12),
-
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';
-                        }else if(value.length < 6){
+                        } else if (value.length < 6) {
                           return 'Password must be atleast 6 characters long';
                         }
                         return null; // if the value is valid
@@ -99,7 +102,9 @@ class LoginPage extends StatelessWidget {
               ),
               const SizedBox(height: 14),
               ElevatedButton(
-                onPressed: loginUser,
+                onPressed: () {
+                  loginUser(context);
+                },
                 style: ButtonStyle(
                   padding: MaterialStateProperty.all<EdgeInsets>(
                     const EdgeInsets.all(8),
