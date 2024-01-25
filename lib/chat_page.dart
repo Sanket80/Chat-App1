@@ -1,15 +1,55 @@
+import 'dart:convert';
+
 import 'package:chat_app/Widgets/ChatBubble.dart';
 import 'package:chat_app/Widgets/chat_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class ChatPage extends StatelessWidget {
-  const ChatPage({super.key /* required this.username */});
+import 'models/chat_message_entity.dart';
 
+class ChatPage extends StatefulWidget {
+  ChatPage({super.key /* required this.username */});
+
+  @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
   // final String username;
+
+  // initiate state of messages
+  List<ChatMessageEntity> _messages = [];
+
+  _loadInitialMessages() async {
+    final response = await rootBundle.loadString('assets/mock_messages.json');
+
+    final List<dynamic> decodedList = jsonDecode(response) as List;
+
+    final List<ChatMessageEntity> _chatMessages = decodedList
+        .map((listItem) => ChatMessageEntity.fromJson(listItem))
+        .toList();
+
+    print(_chatMessages.length);
+
+    // final state of messages
+    setState(() {
+      _messages = _chatMessages;
+    });
+  }
+
+  onMessageSend(ChatMessageEntity entity) {
+    _messages.add(entity);
+    setState(() {});
+  }
+
+  @override
+void initState() {
+    super.initState();
+    _loadInitialMessages();
+  }
 
   @override
   Widget build(BuildContext context) {
-
     final username = ModalRoute.of(context)!.settings.arguments as String;
 
     return Scaffold(
@@ -28,13 +68,13 @@ class ChatPage extends StatelessWidget {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: 10,
+              itemCount: _messages.length,
               itemBuilder: (context, index) {
                 return ChatBubble(
-                  alignment: index % 2 == 0
-                      ? Alignment.centerLeft
-                      : Alignment.centerRight,
-                  message: 'Hey Sanket, how are you?',
+                  alignment: _messages[index].author.userName == 'Sanket80'
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
+                  entity: _messages[index],
                 );
               },
             ),
@@ -55,8 +95,8 @@ class ChatPage extends StatelessWidget {
             //   ],
             // ),
           ),
-          const SizedBox(height: 14),
-          ChatInput(),
+          const SizedBox(height: 8),
+          ChatInput(onSubmit: onMessageSend,),
         ],
       ),
     );
