@@ -38,9 +38,17 @@ class LoginPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Image.asset(
-                  'assets/banner_image.png',
-                  height: 200,),
+                Container(
+                  height: 200,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.fitHeight,
+                      image: AssetImage('assets/banner_image.png'),
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
                 const SizedBox(height: 24),
                 const Text(
                   'Let\'s Sign you in',
@@ -126,14 +134,14 @@ class LoginPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 14),
                 GestureDetector(
-                  onTap: () async {
-                    if(!await launch(_mainUrl)){
-                      throw 'Could not launch $_mainUrl';
-                    }
-                  },
-                  child: Column(
-                    children: [
-                      Text('Connect with me on LinkedIn',
+                    onTap: () async {
+                      if (!await launch(_mainUrl)) {
+                        throw 'Could not launch $_mainUrl';
+                      }
+                    },
+                    child: Column(children: [
+                      Text(
+                        'Connect with me on LinkedIn',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -141,22 +149,22 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 6),
-                      Text('$_mainUrl',
+                      Text(
+                        '$_mainUrl',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           color: Colors.deepPurpleAccent,
                         ),
                       ),
-                    ]
-                  )
-                ),
+                    ])),
                 const SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     SocialMediaButton.linkedin(
-                      url: 'https://www.linkedin.com/in/sanket-kadam-0905a6225/',
+                      url:
+                          'https://www.linkedin.com/in/sanket-kadam-0905a6225/',
                       size: 50,
                       color: Colors.blue,
                     ),

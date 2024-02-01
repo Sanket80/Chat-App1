@@ -1,4 +1,3 @@
-
 import 'package:json_annotation/json_annotation.dart';
 part 'image_model.g.dart';
 
@@ -22,7 +21,7 @@ class PixelfordImage{
     required this.urlSmallSize,
   });
 
-  factory PixelfordImage.fromJson(Map<String, dynamic> json) => _$PixelformImageFromJson(json);
+  factory PixelfordImage.fromJson(Map<String, dynamic> json) => _$PixelfordImageFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PixelformImageToJson(this);
+  Map<String, dynamic> toJson() => _$PixelfordImageToJson(this);
 }

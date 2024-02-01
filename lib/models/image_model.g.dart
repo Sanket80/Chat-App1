@@ -6,7 +6,7 @@ part of 'image_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PixelfordImage _$PixelformImageFromJson(Map<String, dynamic> json) =>
+PixelfordImage _$PixelfordImageFromJson(Map<String, dynamic> json) =>
     PixelfordImage(
       id: json['id'] as String,
       filename: json['filename'] as String,
@@ -15,7 +15,7 @@ PixelfordImage _$PixelformImageFromJson(Map<String, dynamic> json) =>
       urlSmallSize: json['url_small_size'] as String,
     );
 
-Map<String, dynamic> _$PixelformImageToJson(PixelfordImage instance) =>
+Map<String, dynamic> _$PixelfordImageToJson(PixelfordImage instance) =>
     <String, dynamic>{
       'id': instance.id,
       'filename': instance.filename,
@@ -23,3 +23,4 @@ Map<String, dynamic> _$PixelformImageToJson(PixelfordImage instance) =>
       'url_full_size': instance.urlFullSize,
       'url_small_size': instance.urlSmallSize,
     };
+
