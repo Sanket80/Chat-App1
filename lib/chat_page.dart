@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:chat_app/Widgets/ChatBubble.dart';
 import 'package:chat_app/Widgets/chat_input.dart';
+import 'package:chat_app/models/image_model.dart';
+import 'package:chat_app/repo/image_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 import 'models/chat_message_entity.dart';
 
@@ -24,7 +27,6 @@ class _ChatPageState extends State<ChatPage> {
     final response = await rootBundle.loadString('assets/mock_messages.json');
 
     final List<dynamic> decodedList = jsonDecode(response) as List;
-
     final List<ChatMessageEntity> _chatMessages = decodedList
         .map((listItem) => ChatMessageEntity.fromJson(listItem))
         .toList();
@@ -42,8 +44,11 @@ class _ChatPageState extends State<ChatPage> {
     setState(() {});
   }
 
+  // Get Network Images from API
+  final ImageRepository _imageRepo = ImageRepository();
+
   @override
-void initState() {
+  void initState() {
     super.initState();
     _loadInitialMessages();
   }
@@ -66,6 +71,16 @@ void initState() {
       ),
       body: Column(
         children: [
+          FutureBuilder<List<PixelfordImage>>(
+            future: _imageRepo.getNetworkImages(),
+            builder: (BuildContext context, AsyncSnapshot<List<PixelfordImage>> snapshot) {
+              if (snapshot.hasData) {
+                return Image.network(snapshot.data![0].urlFullSize);
+              } else {
+                return const CircularProgressIndicator();
+              }
+            },
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: _messages.length,
@@ -96,7 +111,9 @@ void initState() {
             // ),
           ),
           const SizedBox(height: 8),
-          ChatInput(onSubmit: onMessageSend,),
+          ChatInput(
+            onSubmit: onMessageSend,
+          ),
         ],
       ),
     );
