@@ -1,6 +1,8 @@
 import 'package:chat_app/Utils/textfield_styles.dart';
 import 'package:chat_app/chat_page.dart';
+import 'package:chat_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media_buttons/social_media_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -9,13 +11,15 @@ class LoginPage extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
 
-  void loginUser(BuildContext context) {
+  Future<void> loginUser(BuildContext context) async{
     if (_formKey.currentContext != null && _formKey.currentState!.validate()) {
       print('Username: ${UserNameController.text}');
       print('Password: ${PasswordController.text}');
       print('Login User');
       // Navigator.push(
       //     context, MaterialPageRoute(builder: (context) => ChatPage(username: UserNameController.text,)));
+
+      await context.read<AuthService>().loginUser(UserNameController.text);
       Navigator.pushReplacementNamed(context, '/chat',
           arguments: '${UserNameController.text}');
     } else {
@@ -111,8 +115,8 @@ class LoginPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 14),
                 ElevatedButton(
-                  onPressed: () {
-                    loginUser(context);
+                  onPressed: () async {
+                    await loginUser(context);
                   },
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all<EdgeInsets>(

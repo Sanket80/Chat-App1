@@ -4,9 +4,11 @@ import 'package:chat_app/Widgets/ChatBubble.dart';
 import 'package:chat_app/Widgets/chat_input.dart';
 import 'package:chat_app/models/image_model.dart';
 import 'package:chat_app/repo/image_repository.dart';
+import 'package:chat_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import 'models/chat_message_entity.dart';
 
@@ -52,7 +54,7 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    final username = ModalRoute.of(context)!.settings.arguments as String;
+    final username = context.watch<AuthService>().getUserName();
 
     return Scaffold(
       appBar: AppBar(
@@ -60,6 +62,7 @@ class _ChatPageState extends State<ChatPage> {
         actions: [
           IconButton(
             onPressed: () {
+              context.read<AuthService>().logoutUser();
               Navigator.popAndPushNamed(context, '/login');
             },
             icon: const Icon(Icons.logout),
@@ -73,7 +76,7 @@ class _ChatPageState extends State<ChatPage> {
               itemCount: _messages.length,
               itemBuilder: (context, index) {
                 return ChatBubble(
-                  alignment: _messages[index].author.userName == 'Sanket80'
+                  alignment: _messages[index].author.userName == context.read<AuthService>().getUserName()
                       ? Alignment.centerRight
                       : Alignment.centerLeft,
                   entity: _messages[index],
